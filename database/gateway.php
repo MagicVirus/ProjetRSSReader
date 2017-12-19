@@ -1,6 +1,5 @@
 <?php
-// admin =21232f297a57a5a743894a0e4a801fc3;
-//lel=0e00e5e62efa31ea7a66a0d0e98efe14;
+
 require_once (__ROOT__.'/database/database.php');
 
 class Gateway{
@@ -20,26 +19,28 @@ class Gateway{
         return null;
     }
 
+    //Verifie la validite des identifiants de l'utilisateur
 	public function ValidCredentials($usr, $pswd){
-    $sql = "SELECT username, password FROM Settings";
-    $result= $this->d->ExecQuery($sql);
+        $sql = "SELECT username, password FROM Settings";
+        $result= $this->d->ExecQuery($sql);
 
-    $row = $result->fetch_assoc();
+        $row = $result->fetch_assoc();
 
-    if($row['username'] == md5($usr) && $row['password'] == md5($pswd)){
-        return true;
+        if($row['username'] == md5($usr) && $row['password'] == md5($pswd)){
+            return true;
     }
         return false;
     }
 
+    //Renvoie la liste des flux RSS
     public function GetUrls(){
-    $sql = "SELECT url FROM Feed";
-    $row = $this->d->ExecQuery($sql);
+        $sql = "SELECT url FROM Feed";
+        $row = $this->d->ExecQuery($sql);
 
-    if ($row->num_rows > 0) {
-      return $row;
-    }
-    return null;
+        if ($row->num_rows > 0) {
+          return $row;
+        }
+        return null;
     }
 
     public function GetMaxNews(){
@@ -56,7 +57,7 @@ class Gateway{
     }
 
     public function SetMaxNews($max_news){
-        $sql = "UPDATE Settings SET max_news = $max_news WHERE Settings.username = 'admin'";
+        $sql = "UPDATE Settings SET max_news = $max_news WHERE Settings.username = '21232f297a57a5a743894a0e4a801fc3'";
         return $this->d->ExecQuery($sql);
     }
 

@@ -10,19 +10,19 @@ class ModelNews{
   private $gateway = null;
   private $sessionAdmin;
 
-    public function getMaxNews(){
-        return $this->maxNews;
-    }
+  public function getMaxNews(){
+      return $this->maxNews;
+  }
 
-    public function getrssXMLArray(){
-        return $this->rssXMLArray;
-    }
+  public function getrssXMLArray(){
+      return $this->rssXMLArray;
+  }
 
-    public function getSessionAdmin(){
-        return $this->sessionAdmin;
-    }
+  public function getSessionAdmin(){
+      return $this->sessionAdmin;
+  }
 
-    function __construct(){
+  function __construct(){
     $this->gateway = new Gateway();
     $this->sessionAdmin = $this->gateway->GetSessionAdmin();
     $this->maxNews = $this->gateway->getMaxNews();

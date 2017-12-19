@@ -8,53 +8,57 @@ class ControllerAdmin{
 	private $url;
 	private $urlAction;
 
-    public function isAdmin(){
+	public function isAdmin(){
 		return $this->admin;
 	}
 
 	function __construct($modelAdmin){
 		$this->modelAdmin = $modelAdmin;
-        $this->sessionID = $this->modelAdmin->getSessionAdmin();
-        if($this->UpdateDB()){
-            $this->reloadPage();
-        }
+		$this->sessionID = $this->modelAdmin->getSessionAdmin();
+		if($this->UpdateDB()){
+			$this->reloadPage();
+		}
 	}
 
+	//Verifie et modifie la base de donnees si besoin
 	public function UpdateDB(){
-        $reload =false;
-        if($this->checkIfMaxNewsUpdated()){
-            if(!$this->modelAdmin->setMaxNews($this->max_news)){
-                $this->modelAdmin->setDBError(true);
-            }
-            $reload = true;
-        }
-        if($this->checkIfUrlUpdated()){
-            if(!$this->modelAdmin->UpdateUrl($this->url, $this->urlAction)){
-                $this->modelAdmin->setDBError(true);
-            }
-            $reload = true;
-        }
-        return $reload;
-    }
+		$reload =false;
+		if($this->checkIfMaxNewsUpdated()){
+			if(!$this->modelAdmin->setMaxNews($this->max_news)){
+				$this->modelAdmin->setDBError(true);
+			}
+			$reload = true;
+		}
+		if($this->checkIfUrlUpdated()){
+			if(!$this->modelAdmin->UpdateUrl($this->url, $this->urlAction)){
+				$this->modelAdmin->setDBError(true);
+			}
+			$reload = true;
+		}
+		return $reload;
+	}
 
+  //Verifie si la valeur de la session est correcte
 	public function CheckSessionID($sessionID){
-	    if($sessionID == $this->sessionID){
-	        return true;
-        }
-        return false;
-    }
+		if($sessionID == $this->sessionID){
+			return true;
+		}
+		return false;
+	}
 
 	public function CreateNewSession(){
-        $_SESSION["admin"] = $this->sessionID;
+		$_SESSION["admin"] = $this->sessionID;
 	}
 
+	//Verifie si les identifiants de l'utilisateur sont valides
 	public function ValidUser($username, $password){
-        if($username != null && password != null) {
-            return $this->modelAdmin->isValidUser($username, $password);
-        }
-        return false;
+		if($username != null && password != null) {
+			return $this->modelAdmin->isValidUser($username, $password);
+		}
+		return false;
 	}
 
+	//Verifie si le nombre de news maximum a ete modifie
 	private function checkIfMaxNewsUpdated(){
 		if(isset($_POST['max_news'])){
 			$this->max_news = $_POST['max_news'];
@@ -64,10 +68,11 @@ class ControllerAdmin{
 		return false;
 	}
 
+	//Verifie si un lien est present dans en POST
 	private function checkIfUrlUpdated(){
 		if(isset($_POST['url']) && !empty($_POST['url'])){
 			$this->url = $_POST['url'];
-            $this->url = filter_var($this->url, FILTER_VALIDATE_URL);
+			$this->url = filter_var($this->url, FILTER_VALIDATE_URL);
 			if($this->rmOrAdd()){
 				return true;
 			}
@@ -75,6 +80,7 @@ class ControllerAdmin{
 		return false;
 	}
 
+	//Verifie si le lien doit etre supprime ou ajoute
 	private function rmOrAdd(){
 		if(isset($_POST['contact'])){
 			$this->urlAction = $_POST['contact'];
@@ -90,6 +96,6 @@ class ControllerAdmin{
 	}
 
 	private function reloadPage(){
-        header("Refresh:0");
-    }
+		header("Refresh:0");
+	}
 }
